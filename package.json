@@ -1,0 +1,42 @@
+{
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saikojosh/Middleware-Engine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/saikojosh/Middleware-Engine/issues"
+  },
+  "name": "middleware-engine",
+  "version": "0.0.1",
+  "description": "A lightweight engine that provides middleware functionality to classes that extend it.",
+  "keywords": [
+    "middleware",
+    "engine",
+    "next",
+    "function",
+    "functions"
+  ],
+  "main": "middlewareEngine.js",
+  "author": "Josh Cole <saikojosh@gmail.com> (http://www.JoshuaCole.me)",
+  "contributors": [
+    {
+      "name": "Josh Cole",
+      "email": "saikojosh@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "object-extender": "^2.0.3"
+  },
+  "devDependencies": {
+    "eslint": "latest",
+    "eslint-config-recombix": "latest",
+    "eslint-plugin-filenames": "latest",
+    "eslint-plugin-json": "latest",
+    "eslint-plugin-node": "^4.2.1",
+    "eslint-plugin-promise": "latest"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "license": "MIT"
+}
