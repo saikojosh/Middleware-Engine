@@ -133,22 +133,23 @@ module.exports = class MiddlewareEngine {
 	 */
 	__executeFunction (executableFunc, primaryValue, otherArgs, prevResult) {
 
-		return new Promise((resolve, reject) => {
+		const promise = new Promise((resolve, reject) => {
 
 			const next = (err, result) => (err ? reject(err) : resolve(result));
 
 			// Do we pass the previous result as a parameter to the next middleware?
 			if (this.config.chainMiddlewareResults) { otherArgs.push(prevResult); }
 
-			// Execute the next middleware function synchronously and capture any thrown errors.
-			try {
-				executableFunc(primaryValue, ...otherArgs, next);
-			}
-			catch (err) {
-				return reject(err);
-			}
+			// Execute the next middleware function and convert its return value into a promise in case it's an async func.
+			const middlewareReturnValue = executableFunc(primaryValue, ...otherArgs, next);
+			const middlewareReturnPromise = Promise.resolve(middlewareReturnValue);
+
+			// Return the actual (top-level) promise we are waiting on, or reject it if an error occured.
+			return middlewareReturnPromise.then(() => promise).catch(reject);
 
 		});
+
+		return promise;
 
 	}
 
