@@ -140,7 +140,13 @@ module.exports = class MiddlewareEngine {
 			// Do we pass the previous result as a parameter to the next middleware?
 			if (this.config.chainMiddlewareResults) { otherArgs.push(prevResult); }
 
-			executableFunc(primaryValue, ...otherArgs, next);
+			// Execute the next middleware function synchronously and capture any thrown errors.
+			try {
+				executableFunc(primaryValue, ...otherArgs, next);
+			}
+			catch (err) {
+				return reject(err);
+			}
 
 		});
 
