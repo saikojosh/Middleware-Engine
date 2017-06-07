@@ -59,6 +59,9 @@ You can supply the following config to the constructor.
 ### engine.isConfigured(handlerId);
 **Can be used externally by the consumer of your class.** Returns true if the given handler ID has been configured with the `.configure()` method.
 
+### engine.inject(dependencyName, dependencyObject);
+**Can be used externally by the consumer of your class.** Allows you to inject a dependency into your class which can be accessed inside your class by calling `this.__dep()` (see below). You can inject as many dependencies as you like by calling this method multiple times.
+
 ### this.\_\_executeMiddleware(primaryValue, arg1, arg2, ...argN);
 **Only to be used internally by your class.** Call this to execute all the middleware that has been added by the consumer via the `.use()` method. Middleware is always executed in the order it was added.
 
@@ -90,3 +93,6 @@ You must call the `next(err, result)` callback at the end of every middleware or
 `function (primaryValue, ...argN, previousResult, next) { ... }`.
 
 The result of the previous middleware execution will be available as the second to last parameter `previousResult` if the config option `chainMiddlewareResults` is set to `true` in the constructor.
+
+## this.\_\_dep(dependencyName);
+**Only to be used internally by your class.** Returns the given injected dependency.
