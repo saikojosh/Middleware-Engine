@@ -19,9 +19,24 @@ module.exports = class MiddlewareEngine {
 			throwOnMissingHandler: true,
 		}, _config);
 
+		this.injected = {};
 		this.handlers = {};
 		this.middleware = [];
 
+	}
+
+	/*
+	 * Allows dependencies to be injected after the engine has been initialised.
+	 */
+	inject (key, dependency) {
+		this.injected[key] = dependency;
+	}
+
+	/*
+	 * Returns a pointer to the given injected dependency, if any.
+	 */
+	__dep (key) {
+		return this.injected[key];
 	}
 
 	/*
