@@ -68,12 +68,12 @@ You can supply the following config to the constructor.
 You can pass as many parameters as you like to this method and they will all be passed to each middleware function. You can use the `primaryValue` parameter to pass in an object/array that you want shared between each of the middleware functions (similar to how you can access the `request` and `response` objects in every Express.js middleware).
 
 #### Default Middleware signature
-`function (primaryValue, arg1, arg2, ...argN, next) { ... }`.
+`function (primaryValue, arg1, arg2, ...argN, next, stop) { ... }`.
 
-You must call the `next(err, result)` callback at the end of every middleware or your application will hang.
+You must call the `next(err, result)` callback at the end of every middleware or your application will hang. Alternatively, if you're waiting for all the middleware to complete and the promise to be resolved before continuing execution in your application you can use the `stop()` method to immediately resolve the promise. You can also pass an error to `stop(err)`.
 
 #### Alternative Middleware Signature
-`function (primaryValue, ...argN, previousResult, next) { ... }`
+`function (primaryValue, ...argN, previousResult, next, stop) { ... }`
 
 The result of the previous middleware execution will be available as the second to last parameter `previousResult` if the config option `chainMiddlewareResults` is set in the constructor.
 
@@ -85,12 +85,12 @@ You can pass as many parameters as you like to this method and they will all be 
 By default, if the handler ID has not been configured an error will be thrown. You can silently swallow the error instead by setting the `throwOnMissingHandler` config to `false` in the constructor.
 
 #### Default Middleware signature
-`function (primaryValue, arg1, arg2, ...argN, next) { ... }`
+`function (primaryValue, arg1, arg2, ...argN, next, stop) { ... }`
 
-You must call the `next(err, result)` callback at the end of every middleware or your application will hang.
+You must call the `next(err, result)` callback at the end of every middleware or your application will hang. Alternatively, if you're waiting for all the middleware to complete and the promise to be resolved before continuing execution in your application you can use the `stop()` method to immediately resolve the promise. You can also pass an error to `stop(err)`.
 
 #### Alternative Middleware Signature
-`function (primaryValue, ...argN, previousResult, next) { ... }`.
+`function (primaryValue, ...argN, previousResult, next, stop) { ... }`.
 
 The result of the previous middleware execution will be available as the second to last parameter `previousResult` if the config option `chainMiddlewareResults` is set to `true` in the constructor.
 
