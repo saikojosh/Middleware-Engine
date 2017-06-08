@@ -139,7 +139,10 @@ module.exports = class MiddlewareEngine {
 			startsWith
 		);
 
-		return promiseChain;
+		return promiseChain
+			.catch(err => {
+				if (typeof err !== `string` || err !== `MIDDLEWARE_ENGINE_BREAK`) { throw err; }  // Allow chain breaking when the "stop()" method is called.
+			});
 
 	}
 
@@ -150,13 +153,15 @@ module.exports = class MiddlewareEngine {
 
 		const promise = new Promise((resolve, reject) => {
 
+			// Callbacks.
 			const next = (err, result) => (err ? reject(err) : resolve(result));
+			const stop = err => reject(err || `MIDDLEWARE_ENGINE_BREAK`);
 
 			// Do we pass the previous result as a parameter to the next middleware?
 			if (this.config.chainMiddlewareResults) { otherArgs.push(prevResult); }
 
 			// Execute the next middleware function and convert its return value into a promise in case it's an async func.
-			const middlewareReturnValue = executableFunc(primaryValue, ...otherArgs, next);
+			const middlewareReturnValue = executableFunc(primaryValue, ...otherArgs, next, stop);
 			const middlewareReturnPromise = Promise.resolve(middlewareReturnValue);
 
 			// Return the actual (top-level) promise we are waiting on, or reject it if an error occured.
