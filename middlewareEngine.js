@@ -161,7 +161,7 @@ module.exports = class MiddlewareEngine {
 			if (this.config.chainMiddlewareResults) { otherArgs.push(prevResult); }
 
 			// Execute the next middleware function and convert its return value into a promise in case it's an async func.
-			const middlewareReturnValue = executableFunc(primaryValue, ...otherArgs, next, stop);
+			const middlewareReturnValue = executableFunc.call(this, primaryValue, ...otherArgs, next, stop);
 			const middlewareReturnPromise = Promise.resolve(middlewareReturnValue);
 
 			// Return the actual (top-level) promise we are waiting on, or reject it if an error occured.
