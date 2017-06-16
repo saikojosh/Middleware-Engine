@@ -149,7 +149,7 @@ module.exports = class MiddlewareEngine {
 	/*
 	 * Executes a single middleware function.
 	 */
-	__executeFunction (executableFunc, primaryValue, otherArgs, prevResult) {
+	__executeFunction (executableFunc, primaryValue, _otherArgs, prevResult) {
 
 		const promise = new Promise((resolve, reject) => {
 
@@ -158,7 +158,7 @@ module.exports = class MiddlewareEngine {
 			const stop = err => reject(err || `MIDDLEWARE_ENGINE_BREAK`);
 
 			// Do we pass the previous result as a parameter to the next middleware?
-			if (this.config.chainMiddlewareResults) { otherArgs.push(prevResult); }
+			const otherArgs = (this.config.chainMiddlewareResults ? [..._otherArgs, prevResult] : [..._otherArgs]);
 
 			// Execute the next middleware function and convert its return value into a promise in case it's an async func.
 			const middlewareReturnValue = executableFunc.call(this, primaryValue, ...otherArgs, next, stop);
