@@ -57,7 +57,7 @@ module.exports = class MiddlewareEngine {
 	 * Returns true if the given dependency has been injected.
 	 */
 	hasDependency (key) {
-		return Boolean(this.__dep(key));
+		return Boolean(this.injected[key]);
 	}
 
 	/*
