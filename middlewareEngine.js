@@ -63,11 +63,13 @@ module.exports = class MiddlewareEngine {
 	/*
 	 * Returns a pointer to the given injected dependency, if any.
 	 */
-	__dep (key) {
+	__dep (key, ignoreMissing = false) {
 
 		const dependency = this.injected[key];
 
-		if (!dependency && this.config.throwOnMissingDependency) { throw new Error(`MISSING_DEPENDENCY`); }
+		if (!dependency && this.config.throwOnMissingDependency && !ignoreMissing) {
+			throw new Error(`MISSING_DEPENDENCY`);
+		}
 
 		return dependency;
 
