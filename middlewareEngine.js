@@ -17,6 +17,7 @@ module.exports = class MiddlewareEngine {
 		this.config = extender.defaults({
 			chainMiddlewareResults: false,
 			throwOnMissingHandler: true,
+			throwOnMissingDependency: true,
 		}, _config);
 
 		this.injected = {};
@@ -36,7 +37,13 @@ module.exports = class MiddlewareEngine {
 	 * Returns a pointer to the given injected dependency, if any.
 	 */
 	__dep (key) {
-		return this.injected[key];
+
+		const dependency = this.injected[key];
+
+		if (!dependency && this.config.throwOnMissingDependency) { throw new Error(`MISSING_DEPENDENCY`); }
+
+		return dependency;
+
 	}
 
 	/*
