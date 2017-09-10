@@ -45,10 +45,11 @@ You must extend the `MiddlewareEngine` class and call the `this.__executeMiddlew
 #### Config Options
 You can supply the following config to the constructor.
 
-| Config                 | Default Value | Description |
-|------------------------|---------------|-------------|
-| chainMiddlewareResults | `false`       | Set to `true` to pass the result of the previous middleware execution to the next middleware function as the second to last parameter. |
-| throwOnMissingHandler  | `true`        | Set to `false` to prevent an error being thrown if you call `this.__executeHandler()` on a handler ID that hasn't been configured. |
+| Config                   | Default Value | Description |
+|--------------------------|---------------|-------------|
+| chainMiddlewareResults   | `false`       | Set to `true` to pass the result of the previous middleware execution to the next middleware function as the second to last parameter. |
+| throwOnMissingHandler    | `true`        | Set to `false` to prevent an error being thrown if you call `this.__executeHandler()` on a handler ID that hasn't been configured. |
+| throwOnMissingDependency | `true`        | Set to `false` to prevent an error being thrown if you call `this.__dep()` for a dependency that hasn't been injected. |
 
 ### engine.use(func1, func2, ...funcN);
 **Can be used externally by the consumer of your class.** Add a number of middleware functions by providing one or more arguments. You can call `.use()` as many times as you like or with as many arguments as you like. The middleware is always executed in the order you add them.
@@ -59,8 +60,17 @@ You can supply the following config to the constructor.
 ### engine.isConfigured(handlerId);
 **Can be used externally by the consumer of your class.** Returns true if the given handler ID has been configured with the `.configure()` method.
 
+### engine.requires()
+Returns an array of required dependencies configured by your class (i.e. added to the `this.requirements` array).
+
 ### engine.inject(dependencyName, dependencyObject);
 **Can be used externally by the consumer of your class.** Allows you to inject a dependency into your class which can be accessed inside your class by calling `this.__dep()` (see below). You can inject as many dependencies as you like by calling this method multiple times.
+
+### engine.areDependenciesSatisfied()
+Returns true if all the dependencies configured by your class have been injected.
+
+### engine.hasDependency(dependencyName)
+Returns true if the given dependency has been injected.
 
 ### this.\_\_executeMiddleware(primaryValue, arg1, arg2, ...argN);
 **Only to be used internally by your class.** Call this to execute all the middleware that has been added by the consumer via the `.use()` method. Middleware is always executed in the order it was added.
