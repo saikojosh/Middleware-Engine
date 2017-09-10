@@ -20,6 +20,7 @@ module.exports = class MiddlewareEngine {
 			throwOnMissingDependency: true,
 		}, _config);
 
+		this.requirements = [];
 		this.injected = {};
 		this.handlers = {};
 		this.middleware = [];
@@ -27,10 +28,36 @@ module.exports = class MiddlewareEngine {
 	}
 
 	/*
+	 * Returns an array of dependency names this module requires, or any empty array.
+	 */
+	requires () {
+		return this.requirements || [];
+	}
+
+	/*
 	 * Allows dependencies to be injected after the engine has been initialised.
 	 */
 	inject (key, dependency) {
 		this.injected[key] = dependency;
+	}
+
+	/*
+	 * Returns true if all the required dependencies have been injected.
+	 */
+	areDependenciesSatisfied () {
+
+		const requirements = this.requires();
+		const missingDependency = requirements.some(requirement => !this.hasDependency(requirement));
+
+		return !missingDependency;
+
+	}
+
+	/*
+	 * Returns true if the given dependency has been injected.
+	 */
+	hasDependency (key) {
+		return Boolean(this.__dep(key));
 	}
 
 	/*
